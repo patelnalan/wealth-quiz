@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Wealth Tax Quiz</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --dark-green: #2b4a46;
+      --light-cream: #e1dfdd;
+      --teal-accent: #4a7c76;
+      --danger: #d9534f;
+      --ok: #5cb85c;
+      --info: #4a90e2;
+    }
+
+    body { margin: 0; font-family: 'Inter', sans-serif; background-color: transparent; display: flex; justify-content: center; padding: 10px; }
+
+    .quiz-card { 
+      background: var(--dark-green); color: var(--light-cream);
+      border: 1px solid var(--teal-accent); border-radius: 12px; 
+      max-width: 750px; width: 100%; box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      position: relative;
+    }
+
+    header { padding: 25px 25px 15px; text-align: center; border-bottom: 1px solid rgba(225, 223, 221, 0.1); }
+    
+    h1 { font-family: 'Playfair Display', serif; margin: 0 0 10px; font-size: 1.8rem; color: var(--light-cream); }
+    .description { font-size: 0.95rem; line-height: 1.5; opacity: 0.9; max-width: 600px; margin: 0 auto; }
+    .instruction-text { color: var(--ok); font-weight: 600; margin-top: 10px; display: block; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    .content { padding: 20px; }
+    .formula-box { background: rgba(255,255,255,0.05); border: 1px solid var(--teal-accent); padding: 12px; border-radius: 8px; text-align: center; margin-bottom: 20px; font-weight: bold; }
+
+    .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+    @media (max-width: 600px) { .options-grid { grid-template-columns: 1fr; } }
+
+    .option { background: rgba(225, 223, 221, 0.05); border: 1px solid rgba(225, 223, 221, 0.2); padding: 12px; border-radius: 8px; cursor: pointer; display: flex; gap: 10px; transition: 0.2s; }
+    .option:hover { background: rgba(225, 223, 221, 0.1); border-color: var(--light-cream); }
+    .option input { transform: scale(1.2); accent-color: var(--ok); }
+
+    .opt-label b { display: block; font-size: 0.85rem; margin-bottom: 2px; }
+    .opt-label i { font-size: 0.75rem; opacity: 0.7; font-style: normal; display: block; line-height: 1.2; }
+
+    .controls { display: flex; gap: 12px; align-items: center; border-top: 1px solid rgba(225, 223, 221, 0.1); padding-top: 20px; }
+    button { background: var(--light-cream); color: var(--dark-green); border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 0.9rem; transition: 0.2s;}
+    button:hover { filter: brightness(0.9); transform: translateY(-1px); }
+    .btn-reset { background: transparent; color: var(--light-cream); border: 1px solid var(--light-cream); }
+
+    .results { display: none; margin-top: 20px; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 10px; max-height: 450px; overflow-y: auto; }
+
+    .summary-card { background: var(--light-cream); color: var(--dark-green); padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+    .summary-card h2 { font-family: 'Playfair Display', serif; margin: 0 0 10px; font-size: 1.3rem; text-align: center; }
+    .calc-row { display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 4px; }
+    .calc-total { border-top: 2px solid var(--dark-green); margin-top: 8px; padding-top: 5px; font-weight: 800; font-size: 1.1rem; }
+
+    #modal-overlay { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11, 31, 20, 0.9); z-index: 100; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; border-radius: 12px; }
+    .modal-content { background: var(--light-cream); color: var(--dark-green); padding: 25px; border-radius: 10px; max-width: 400px; text-align: center; }
+    .modal-content h3 { font-family: 'Playfair Display', serif; margin-top: 0; }
+    .modal-content p { font-size: 0.9rem; line-height: 1.4; margin-bottom: 20px; }
+
+    .status-badge { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; padding: 2px 6px; border-radius: 4px; }
+    .s-counted { background: var(--ok); color: #000; }
+    .s-deducted { background: var(--info); color: #fff; }
+    .s-excluded { background: #777; color: #fff; }
+
+    .feedback { margin-bottom: 12px; padding: 12px; border-radius: 6px; background: rgba(255,255,255,0.03); border-left: 4px solid transparent;}
+    .res-title { font-weight: bold; font-size: 0.9rem; }
+    .res-reason { font-size: 0.8rem; opacity: 0.8; margin-top: 5px; line-height: 1.4; }
+  </style>
+</head>
+<body>
+
+<div class="quiz-card">
+  <div id="modal-overlay">
+    <div class="modal-content">
+      <h3>Wealth ≠ Income</h3>
+      <p>In a <b>Wealth Tax</b>, your yearly earnings (salary) are typically ignored. The tax only cares about your "Net Wealth"—the total value of what you own (assets) minus what you owe (debts).</p>
+      <button onclick="closeModal()">Back to Quiz</button>
+    </div>
+  </div>
+
+  <header>
+    <h1>The Wealth Tax Quiz</h1>
+    <p class="description">How well do you understand what counts towards a "Net Wealth" calculation? 
+    <span class="instruction-text">Select every item below that would apply:</span></p>
+  </header>
+
+  <div class="content">
+    <div class="formula-box">Total Assets &minus; Total Debts = Taxable Net Wealth</div>
+    <div class="options-grid" id="options"></div>
+    <div class="controls">
+      <button onclick="check()">Check My Score</button>
+      <button class="btn-reset" onclick="reset()">Reset</button>
+      <div id="score-label" style="margin-left:auto; font-weight:bold;"></div>
+    </div>
+    <div id="results" class="results"></div>
+  </div>
+</div>
+
+<script>
+const quizData = [
+  { id: 'salary', label: '£250,000 Annual Salary', sub: 'Income from your job.', type: 'Excluded', val: 0, correct: false, reason: 'Wealth taxes look at what you *own*, not what you *earn*. Income is already covered by Income Tax.' },
+  { id: 'home', label: 'Main Home', sub: 'Your primary residence.', type: 'Asset (Counted)', val: 750000, correct: true, reason: 'Property is a core asset. Most wealth taxes include your home value in the total.' },
+  { id: 'mortgage', label: 'Mortgage Debt', sub: 'Loan balance on your house.', type: 'Debt (Deducted)', val: -400000, correct: true, reason: 'You subtract the mortgage from the house value so you only pay tax on the equity you truly own.' },
+  { id: 'swiss', label: 'Offshore Bank Account', sub: 'Cash held in a foreign account.', type: 'Asset (Counted)', val: 200000, correct: true, reason: 'Wealth taxes are typically "worldwide." Residents are taxed on global assets, regardless of location.' },
+  { id: 'gold', label: 'Gold Bullion & Jewellery', sub: 'Physical gold or precious metals.', type: 'Asset (Counted)', val: 45000, correct: true, reason: 'Precious metals are significant stores of value and are counted as taxable assets.' },
+  { id: 'pension', label: 'Pension Savings', sub: 'Your private pension pot.', type: 'Asset (Counted)', val: 180000, correct: true, reason: 'Counted in many models, though highly debated because you cannot access the money until retirement.' },
+  { id: 'btl', label: 'Rental Properties', sub: 'Investment real estate.', type: 'Asset (Counted)', val: 400000, correct: true, reason: 'Investment real estate is a standard part of the wealth tax base.' },
+  { id: 'ccard', label: 'Credit Card & Personal Loans', sub: 'Outstanding personal debt.', type: 'Debt (Deducted)', val: -15000, correct: true, reason: 'All valid personal debts are subtracted from your assets, lowering your final taxable wealth.' },
+  { id: 'biz', label: 'Private Business Shares', sub: 'Ownership in a non-listed company.', type: 'Asset (Counted)', val: 250000, correct: true, reason: 'Business ownership is wealth, though valuation can be complex for the tax office.' },
+  { id: 'plate', label: 'Private Number Plate', sub: 'A plate worth £30,000.', type: 'Asset (Counted)', val: 30000, correct: true, reason: 'If an item has a clear market resale value, it is an asset that adds to your net worth.' },
+  { id: 'art', label: 'Fine Art & Collectibles', sub: 'Expensive paintings or sculptures.', type: 'Asset (Counted)', val: 100000, correct: true, reason: 'Included to prevent people from "hiding" cash in luxury goods that appreciate.' },
+  { id: 'wardrobe', label: 'Designer Wardrobe', sub: 'High-end clothes and shoes.', type: 'Excluded', val: 0, correct: false, reason: 'Usually excluded due to the administrative difficulty of valuing individual household items.' },
+  { id: 'student', label: 'Student Loan Debt', sub: 'Balance owed to the SLC.', type: 'Debt (Deducted)', val: -35000, correct: true, reason: 'A debt that reduces your total net wealth, potentially lowering your tax bracket.' },
+  { id: 'goods', label: 'Household Goods', sub: 'Standard furniture and appliances.', type: 'Excluded', val: 0, correct: false, reason: 'Excluded. The cost to value every item in a home is higher than the tax it would likely raise.' }
+];
+
+function render() {
+  const container = document.getElementById('options');
+  container.innerHTML = quizData.map(item => `
+    <label class="option">
+      <input type="checkbox" id="chk-${item.id}">
+      <div class="opt-label"><b>${item.label}</b><i>${item.sub}</i></div>
+    </label>
+  `).join('');
+}
+
+function check() {
+  let score = 0, tAssets = 0, tDebts = 0, feedbackHtml = '';
+  if (document.getElementById('chk-salary').checked) document.getElementById('modal-overlay').style.display = 'flex';
+
+  quizData.forEach(item => {
+    const isChecked = document.getElementById(`chk-${item.id}`).checked;
+    const isCorrect = isChecked === item.correct;
+    if (isCorrect) score++;
+    if (isChecked) {
+      if (item.val > 0) tAssets += item.val;
+      if (item.val < 0) tDebts += Math.abs(item.val);
+    }
+    let bCls = item.type.includes('Asset') ? 's-counted' : (item.type.includes('Debt') ? 's-deducted' : 's-excluded');
+    feedbackHtml += `<div class="feedback" style="border-left-color: ${isCorrect ? 'var(--ok)' : 'var(--danger)'}"><div style="display:flex; justify-content:space-between; align-items:start;"><span class="res-title">${isCorrect ? '✓' : '✗'} ${item.label}</span><span class="status-badge ${bCls}">${item.type}</span></div><div class="res-reason">${item.reason}</div></div>`;
+  });
+
+  const res = document.getElementById('results');
+  res.innerHTML = `<div class="summary-card"><h2>Your Wealth Tax Calculation</h2><div class="calc-row"><span>Total Assets Selected:</span> <span>£${tAssets.toLocaleString()}</span></div><div class="calc-row"><span>Total Debts Deducted:</span> <span>- £${tDebts.toLocaleString()}</span></div><div class="calc-total"><span>Taxable Net Wealth:</span> <span>£${(tAssets - tDebts).toLocaleString()}</span></div></div>` + feedbackHtml;
+  res.style.display = 'block';
+  document.getElementById('score-label').innerText = `Score: ${score}/${quizData.length}`;
+  res.scrollTop = 0;
+}
+
+function closeModal() { document.getElementById('modal-overlay').style.display = 'none'; }
+function reset() { document.getElementById('results').style.display = 'none'; document.getElementById('score-label').innerText = ''; render(); }
+render();
+</script>
+</body>
+</html> 
