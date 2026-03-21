@@ -4,71 +4,133 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>The Wealth Tax Quiz</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:ital,wght@0,300;0,400;0,700;1,300&display=swap" rel="stylesheet">
   
   <style>
     :root {
-      --dark-green: #2b4a46;
-      --light-cream: #e1dfdd;
-      --teal-accent: #4a7c76;
-      --danger: #d9534f;
-      --ok: #5cb85c;
-      --info: #4a90e2;
+      --dark-green: #2B4A46;
+      --darker-green: #1C3530;
+      --darkest-green: #1a3d33;
+      --teal-accent: #3A8A7A;
+      --light-green-text: #A8D5B5;
+      --muted-green: #7AAE8A;
+      --card-bg: #F4F9F5;
+      --mint-tint: #E8F4F0;
+      --light-green-box: #EEF7F1;
+      --cream-bg: #E1DFDD;
+      --danger: #C0392B;
+      --danger-bg: #FDF0F0;
+      --ok: #3A8A7A;
+      --ok-light: #E8F4F0;
+      --divider: #D0E8D8;
+      --body-text: #333333;
+      --label-text: #555555;
+      --muted-text: #888888;
     }
 
-    body { margin: 0; font-family: 'Inter', sans-serif; background-color: transparent; display: flex; justify-content: center; padding: 10px; }
+    body { margin: 0; font-family: 'Lato', sans-serif; background-color: transparent; display: flex; justify-content: center; padding: 10px; }
 
     .quiz-card { 
-      background: var(--dark-green); color: var(--light-cream);
-      border: 1px solid var(--teal-accent); border-radius: 12px; 
-      max-width: 750px; width: 100%; box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      background: var(--dark-green); color: #D4EAD8;
+      border: 4px solid var(--teal-accent); border-radius: 12px; 
+      max-width: 750px; width: 100%; box-shadow: 0 8px 24px rgba(43,74,70,0.25);
       position: relative;
     }
 
-    header { padding: 25px 25px 15px; text-align: center; border-bottom: 1px solid rgba(225, 223, 221, 0.1); }
+    header { 
+      background: var(--darker-green);
+      padding: 22px 25px 18px; 
+      text-align: center; 
+      border-bottom: 3px solid var(--teal-accent);
+      border-radius: 8px 8px 0 0;
+      position: relative;
+    }
+    header::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: var(--teal-accent);
+    }
     
-    h1 { font-family: 'Playfair Display', serif; margin: 0 0 10px; font-size: 1.8rem; color: var(--light-cream); }
-    .description { font-size: 0.95rem; line-height: 1.5; opacity: 0.9; max-width: 600px; margin: 0 auto; }
-    .instruction-text { color: var(--ok); font-weight: 600; margin-top: 10px; display: block; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; }
+    h1 { font-family: 'Playfair Display', serif; margin: 0 0 8px; font-size: 1.7rem; color: #FFFFFF; }
+    .description { font-size: 0.9rem; line-height: 1.5; color: #D4EAD8; max-width: 600px; margin: 0 auto; }
+    .instruction-text { color: var(--light-green-text); font-weight: 700; margin-top: 10px; display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1.5px; }
 
-    .content { padding: 20px; }
-    .formula-box { background: rgba(255,255,255,0.05); border: 1px solid var(--teal-accent); padding: 12px; border-radius: 8px; text-align: center; margin-bottom: 20px; font-weight: bold; }
+    .content { padding: 20px; margin-top: 5px; }
+    .formula-box { 
+      background: rgba(58,138,122,0.15); 
+      border: 2px solid var(--teal-accent); 
+      padding: 12px; border-radius: 8px; 
+      text-align: center; margin-bottom: 20px; 
+      font-weight: 700; font-size: 0.95rem;
+      color: #FFFFFF;
+    }
 
-    .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+    .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 20px; }
     @media (max-width: 600px) { .options-grid { grid-template-columns: 1fr; } }
 
-    .option { background: rgba(225, 223, 221, 0.05); border: 1px solid rgba(225, 223, 221, 0.2); padding: 12px; border-radius: 8px; cursor: pointer; display: flex; gap: 10px; transition: 0.2s; }
-    .option:hover { background: rgba(225, 223, 221, 0.1); border-color: var(--light-cream); }
-    .option input { transform: scale(1.2); accent-color: var(--ok); }
+    .option { 
+      background: rgba(58,138,122,0.08); 
+      border: 2px solid rgba(58,138,122,0.3); 
+      padding: 10px 12px; border-radius: 8px; 
+      cursor: pointer; display: flex; gap: 10px; 
+      transition: 0.2s; align-items: center;
+    }
+    .option:hover { background: rgba(58,138,122,0.18); border-color: var(--teal-accent); }
+    .option input { transform: scale(1.2); accent-color: var(--teal-accent); }
 
-    .opt-label b { display: block; font-size: 0.85rem; margin-bottom: 2px; }
-    .opt-label i { font-size: 0.75rem; opacity: 0.7; font-style: normal; display: block; line-height: 1.2; }
+    .opt-label b { display: block; font-size: 0.82rem; margin-bottom: 2px; color: #FFFFFF; }
+    .opt-label i { font-size: 0.72rem; color: var(--muted-green); font-style: italic; font-weight: 300; display: block; line-height: 1.2; }
 
-    .controls { display: flex; gap: 12px; align-items: center; border-top: 1px solid rgba(225, 223, 221, 0.1); padding-top: 20px; }
-    button { background: var(--light-cream); color: var(--dark-green); border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 0.9rem; transition: 0.2s;}
-    button:hover { filter: brightness(0.9); transform: translateY(-1px); }
-    .btn-reset { background: transparent; color: var(--light-cream); border: 1px solid var(--light-cream); }
+    .controls { 
+      display: flex; gap: 12px; align-items: center; 
+      border-top: 2px solid var(--teal-accent); 
+      padding-top: 18px; 
+    }
+    button { 
+      background: var(--teal-accent); color: #FFFFFF; 
+      border: none; padding: 9px 18px; border-radius: 6px; 
+      font-weight: 700; cursor: pointer; font-size: 0.85rem; 
+      font-family: 'Lato', sans-serif;
+      transition: 0.2s;
+    }
+    button:hover { background: var(--dark-green); transform: translateY(-1px); }
+    .btn-reset { background: transparent; color: #D4EAD8; border: 1.5px solid var(--teal-accent); }
+    .btn-reset:hover { background: rgba(58,138,122,0.15); }
 
-    .results { display: none; margin-top: 20px; padding: 15px; background: rgba(0,0,0,0.2); border-radius: 10px; max-height: 450px; overflow-y: auto; }
+    .results { display: none; margin-top: 18px; padding: 15px; background: var(--darker-green); border: 2px solid var(--teal-accent); border-radius: 10px; max-height: 450px; overflow-y: auto; }
 
-    .summary-card { background: var(--light-cream); color: var(--dark-green); padding: 15px; border-radius: 8px; margin-bottom: 20px; }
-    .summary-card h2 { font-family: 'Playfair Display', serif; margin: 0 0 10px; font-size: 1.3rem; text-align: center; }
-    .calc-row { display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 4px; }
-    .calc-total { border-top: 2px solid var(--dark-green); margin-top: 8px; padding-top: 5px; font-weight: 800; font-size: 1.1rem; }
+    .summary-card { 
+      background: var(--card-bg); color: var(--dark-green); 
+      padding: 15px; border-radius: 8px; margin-bottom: 18px; 
+      border: 2px solid var(--teal-accent);
+    }
+    .summary-card h2 { font-family: 'Playfair Display', serif; margin: 0 0 10px; font-size: 1.2rem; text-align: center; color: var(--dark-green); }
+    .calc-row { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 4px; color: var(--body-text); }
+    .calc-total { border-top: 2px solid var(--dark-green); margin-top: 8px; padding-top: 5px; font-weight: 800; font-size: 1rem; color: var(--dark-green); }
 
-    #modal-overlay { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11, 31, 20, 0.9); z-index: 100; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; border-radius: 12px; }
-    .modal-content { background: var(--light-cream); color: var(--dark-green); padding: 25px; border-radius: 10px; max-width: 400px; text-align: center; }
-    .modal-content h3 { font-family: 'Playfair Display', serif; margin-top: 0; }
-    .modal-content p { font-size: 0.9rem; line-height: 1.4; margin-bottom: 20px; }
+    #modal-overlay { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(26, 61, 51, 0.95); z-index: 100; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; border-radius: 10px; }
+    .modal-content { background: var(--card-bg); color: var(--dark-green); padding: 25px; border-radius: 10px; max-width: 400px; text-align: center; border: 2px solid var(--teal-accent); }
+    .modal-content h3 { font-family: 'Playfair Display', serif; margin-top: 0; color: var(--dark-green); }
+    .modal-content p { font-size: 0.88rem; line-height: 1.5; margin-bottom: 20px; color: var(--body-text); }
 
-    .status-badge { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; padding: 2px 6px; border-radius: 4px; }
-    .s-counted { background: var(--ok); color: #000; }
-    .s-deducted { background: var(--info); color: #fff; }
-    .s-excluded { background: #777; color: #fff; }
+    .status-badge { font-size: 0.6rem; font-weight: 800; text-transform: uppercase; padding: 2px 7px; border-radius: 4px; letter-spacing: 0.5px; }
+    .s-counted { background: var(--teal-accent); color: #FFFFFF; }
+    .s-deducted { background: var(--dark-green); color: #FFFFFF; }
+    .s-excluded { background: var(--muted-text); color: #FFFFFF; }
 
-    .feedback { margin-bottom: 12px; padding: 12px; border-radius: 6px; background: rgba(255,255,255,0.03); border-left: 4px solid transparent;}
-    .res-title { font-weight: bold; font-size: 0.9rem; }
-    .res-reason { font-size: 0.8rem; opacity: 0.8; margin-top: 5px; line-height: 1.4; }
+    .feedback { margin-bottom: 10px; padding: 10px 12px; border-radius: 6px; background: rgba(58,138,122,0.06); border-left: 4px solid transparent; }
+    .res-title { font-weight: 700; font-size: 0.85rem; color: #FFFFFF; }
+    .res-reason { font-size: 0.78rem; color: #D4EAD8; margin-top: 4px; line-height: 1.45; }
+    .res-note { font-size: 0.72rem; color: var(--light-green-text); font-style: italic; font-weight: 300; margin-top: 3px; line-height: 1.35; }
+
+    /* Scrollbar styling */
+    .results::-webkit-scrollbar { width: 6px; }
+    .results::-webkit-scrollbar-track { background: var(--darker-green); border-radius: 3px; }
+    .results::-webkit-scrollbar-thumb { background: var(--teal-accent); border-radius: 3px; }
   </style>
 </head>
 <body>
@@ -76,25 +138,25 @@
 <div class="quiz-card">
   <div id="modal-overlay">
     <div class="modal-content">
-      <h3>Wealth ≠ Income</h3>
-      <p>In a <b>Wealth Tax</b>, your yearly earnings (salary) are typically ignored. The tax only cares about your "Net Wealth"—the total value of what you own (assets) minus what you owe (debts).</p>
+      <h3>Wealth Is Not the Same as Income</h3>
+      <p>A wealth tax only looks at what you <b>own</b>, not what you <b>earn</b>. Your salary is already taxed through Income Tax. Net wealth is calculated from your total assets minus your total debts.</p>
       <button onclick="closeModal()">Back to Quiz</button>
     </div>
   </div>
 
   <header>
     <h1>The Wealth Tax Quiz</h1>
-    <p class="description">How well do you understand what counts towards a "Net Wealth" calculation? 
+    <p class="description">This quiz tests whether you understand what counts towards <b>net wealth</b>. Remember: net wealth is the total value of everything you own, minus everything you owe.
     <span class="instruction-text">Select every item below that would apply:</span></p>
   </header>
 
   <div class="content">
-    <div class="formula-box">Total Assets &minus; Total Debts = Taxable Net Wealth</div>
+    <div class="formula-box">Total Assets &minus; Total Debts = Net Wealth</div>
     <div class="options-grid" id="options"></div>
     <div class="controls">
       <button onclick="check()">Check My Score</button>
       <button class="btn-reset" onclick="reset()">Reset</button>
-      <div id="score-label" style="margin-left:auto; font-weight:bold;"></div>
+      <div id="score-label" style="margin-left:auto; font-weight:700; font-size:0.9rem; color:#FFFFFF;"></div>
     </div>
     <div id="results" class="results"></div>
   </div>
@@ -102,20 +164,48 @@
 
 <script>
 const quizData = [
-  { id: 'salary', label: '£250,000 Annual Salary', sub: 'Income from your job.', type: 'Excluded', val: 0, correct: false, reason: 'Wealth taxes look at what you *own*, not what you *earn*. Income is already covered by Income Tax.' },
-  { id: 'home', label: 'Main Home', sub: 'Your primary residence.', type: 'Asset (Counted)', val: 750000, correct: true, reason: 'Property is a core asset. Most wealth taxes include your home value in the total.' },
-  { id: 'mortgage', label: 'Mortgage Debt', sub: 'Loan balance on your house.', type: 'Debt (Deducted)', val: -400000, correct: true, reason: 'You subtract the mortgage from the house value so you only pay tax on the equity you truly own.' },
-  { id: 'swiss', label: 'Offshore Bank Account', sub: 'Cash held in a foreign account.', type: 'Asset (Counted)', val: 200000, correct: true, reason: 'Wealth taxes are typically "worldwide." Residents are taxed on global assets, regardless of location.' },
-  { id: 'gold', label: 'Gold Bullion & Jewellery', sub: 'Physical gold or precious metals.', type: 'Asset (Counted)', val: 45000, correct: true, reason: 'Precious metals are significant stores of value and are counted as taxable assets.' },
-  { id: 'pension', label: 'Pension Savings', sub: 'Your private pension pot.', type: 'Asset (Counted)', val: 180000, correct: true, reason: 'Counted in many models, though highly debated because you cannot access the money until retirement.' },
-  { id: 'btl', label: 'Rental Properties', sub: 'Investment real estate.', type: 'Asset (Counted)', val: 400000, correct: true, reason: 'Investment real estate is a standard part of the wealth tax base.' },
-  { id: 'ccard', label: 'Credit Card & Personal Loans', sub: 'Outstanding personal debt.', type: 'Debt (Deducted)', val: -15000, correct: true, reason: 'All valid personal debts are subtracted from your assets, lowering your final taxable wealth.' },
-  { id: 'biz', label: 'Private Business Shares', sub: 'Ownership in a non-listed company.', type: 'Asset (Counted)', val: 250000, correct: true, reason: 'Business ownership is wealth, though valuation can be complex for the tax office.' },
-  { id: 'plate', label: 'Private Number Plate', sub: 'A plate worth £30,000.', type: 'Asset (Counted)', val: 30000, correct: true, reason: 'If an item has a clear market resale value, it is an asset that adds to your net worth.' },
-  { id: 'art', label: 'Fine Art & Collectibles', sub: 'Expensive paintings or sculptures.', type: 'Asset (Counted)', val: 100000, correct: true, reason: 'Included to prevent people from "hiding" cash in luxury goods that appreciate.' },
-  { id: 'wardrobe', label: 'Designer Wardrobe', sub: 'High-end clothes and shoes.', type: 'Excluded', val: 0, correct: false, reason: 'Usually excluded due to the administrative difficulty of valuing individual household items.' },
-  { id: 'student', label: 'Student Loan Debt', sub: 'Balance owed to the SLC.', type: 'Debt (Deducted)', val: -35000, correct: true, reason: 'A debt that reduces your total net wealth, potentially lowering your tax bracket.' },
-  { id: 'goods', label: 'Household Goods', sub: 'Standard furniture and appliances.', type: 'Excluded', val: 0, correct: false, reason: 'Excluded. The cost to value every item in a home is higher than the tax it would likely raise.' }
+  { id: 'salary', label: '£250,000 Annual Salary', sub: 'Income from your job.', type: 'Excluded', val: 0, correct: false, 
+    reason: 'A wealth tax looks at what you own, not what you earn. Income is already covered by Income Tax.',
+    note: '' },
+  { id: 'home', label: 'Main Home', sub: 'Your primary residence.', type: 'Asset (Counted)', val: 750000, correct: true, 
+    reason: 'Property is a core asset. Your home has economic value and forms part of your net wealth.',
+    note: 'Some countries offer a discount on primary residence value (e.g. Norway values it at 25%), but it is still included in the calculation.' },
+  { id: 'mortgage', label: 'Mortgage Debt', sub: 'Loan balance on your house.', type: 'Debt (Deducted)', val: -400000, correct: true, 
+    reason: 'Debts are subtracted from your total assets. You only pay tax on the equity you truly own.',
+    note: '' },
+  { id: 'swiss', label: 'Offshore Bank Account', sub: 'Cash held in a foreign account.', type: 'Asset (Counted)', val: 200000, correct: true, 
+    reason: 'Wealth taxes are typically worldwide. Residents are taxed on all assets, regardless of where they are held.',
+    note: '' },
+  { id: 'gold', label: 'Gold Bullion and Jewellery', sub: 'Physical gold or precious metals.', type: 'Asset (Counted)', val: 45000, correct: true, 
+    reason: 'Precious metals and jewellery have clear market value and are counted as assets.',
+    note: '' },
+  { id: 'pension', label: 'Pension Savings', sub: 'Your private pension pot.', type: 'Asset (Counted)', val: 180000, correct: true, 
+    reason: 'Pensions are part of your net wealth. They represent money you own, even if you cannot access it until retirement.',
+    note: 'Pensions are one of the most debated exemptions. Many countries (Norway, Spain, Switzerland) exempt them from the wealth tax, but they still count as part of your total net wealth.' },
+  { id: 'btl', label: 'Rental Properties', sub: 'Investment real estate.', type: 'Asset (Counted)', val: 400000, correct: true, 
+    reason: 'Investment property is a standard part of the wealth base. It has clear market value.',
+    note: '' },
+  { id: 'ccard', label: 'Credit Card and Personal Loans', sub: 'Outstanding personal debt.', type: 'Debt (Deducted)', val: -15000, correct: true, 
+    reason: 'All personal debts are subtracted from your total assets, reducing your taxable net wealth.',
+    note: '' },
+  { id: 'biz', label: 'Private Business Shares', sub: 'Ownership in a non-listed company.', type: 'Asset (Counted)', val: 250000, correct: true, 
+    reason: 'Business ownership is wealth. If your stake has value, it counts towards your net wealth.',
+    note: 'Valuing private businesses is one of the hardest challenges for wealth tax administrators, as there is no public market price.' },
+  { id: 'plate', label: 'Private Number Plate', sub: 'A plate worth £30,000.', type: 'Asset (Counted)', val: 30000, correct: true, 
+    reason: 'Any item with a clear resale value is an asset that adds to your net wealth.',
+    note: '' },
+  { id: 'art', label: 'Fine Art and Collectibles', sub: 'Expensive paintings or sculptures.', type: 'Asset (Counted)', val: 100000, correct: true, 
+    reason: 'Art and collectibles have economic value. Excluding them would allow people to convert cash into untaxed luxury goods.',
+    note: '' },
+  { id: 'student', label: 'Student Loan Debt', sub: 'Balance owed to the SLC.', type: 'Debt (Deducted)', val: -35000, correct: true, 
+    reason: 'A debt you owe. It reduces your total net wealth, just like a mortgage or personal loan.',
+    note: '' },
+  { id: 'wardrobe', label: 'Designer Wardrobe', sub: 'High-end clothes and shoes.', type: 'Asset (Counted)', val: 15000, correct: true, 
+    reason: 'If items have resale value, they technically form part of your net wealth.',
+    note: 'In practice, most wealth tax proposals exclude everyday personal belongings because the cost of valuing every item would be higher than the tax it would raise. But high-value items with clear resale markets (e.g. luxury handbags) are harder to justify excluding.' },
+  { id: 'goods', label: 'Household Goods', sub: 'Furniture and appliances.', type: 'Asset (Counted)', val: 8000, correct: true, 
+    reason: 'Household goods have some economic value, so they technically count as part of your net wealth.',
+    note: 'In practice, most countries exempt ordinary household contents because valuing them is impractical. Switzerland, for example, exempts household goods below CHF 100,000. This is an administrative choice, not an economic one.' }
 ];
 
 function render() {
@@ -141,11 +231,12 @@ function check() {
       if (item.val < 0) tDebts += Math.abs(item.val);
     }
     let bCls = item.type.includes('Asset') ? 's-counted' : (item.type.includes('Debt') ? 's-deducted' : 's-excluded');
-    feedbackHtml += `<div class="feedback" style="border-left-color: ${isCorrect ? 'var(--ok)' : 'var(--danger)'}"><div style="display:flex; justify-content:space-between; align-items:start;"><span class="res-title">${isCorrect ? '✓' : '✗'} ${item.label}</span><span class="status-badge ${bCls}">${item.type}</span></div><div class="res-reason">${item.reason}</div></div>`;
+    let noteHtml = item.note ? `<div class="res-note">${item.note}</div>` : '';
+    feedbackHtml += `<div class="feedback" style="border-left-color: ${isCorrect ? 'var(--ok)' : 'var(--danger)'}"><div style="display:flex; justify-content:space-between; align-items:start;"><span class="res-title">${isCorrect ? '✓' : '✗'} ${item.label}</span><span class="status-badge ${bCls}">${item.type}</span></div><div class="res-reason">${item.reason}</div>${noteHtml}</div>`;
   });
 
   const res = document.getElementById('results');
-  res.innerHTML = `<div class="summary-card"><h2>Your Wealth Tax Calculation</h2><div class="calc-row"><span>Total Assets Selected:</span> <span>£${tAssets.toLocaleString()}</span></div><div class="calc-row"><span>Total Debts Deducted:</span> <span>- £${tDebts.toLocaleString()}</span></div><div class="calc-total"><span>Taxable Net Wealth:</span> <span>£${(tAssets - tDebts).toLocaleString()}</span></div></div>` + feedbackHtml;
+  res.innerHTML = `<div class="summary-card"><h2>Your Net Wealth Calculation</h2><div class="calc-row"><span>Total Assets Selected:</span> <span>£${tAssets.toLocaleString()}</span></div><div class="calc-row"><span>Total Debts Deducted:</span> <span>- £${tDebts.toLocaleString()}</span></div><div class="calc-total"><span>Net Wealth:</span> <span>£${(tAssets - tDebts).toLocaleString()}</span></div></div>` + feedbackHtml;
   res.style.display = 'block';
   document.getElementById('score-label').innerText = `Score: ${score}/${quizData.length}`;
   res.scrollTop = 0;
@@ -156,4 +247,4 @@ function reset() { document.getElementById('results').style.display = 'none'; do
 render();
 </script>
 </body>
-</html> 
+</html>
